@@ -1,0 +1,17 @@
+pipeline {
+    agent none
+    stages {
+    	stage('Build Image') {
+          agent { label 'dotnetcore31' }
+          steps {
+            script {
+              openshift.withCluster() {
+                openshift.withProject("mujsohi1-dev") {
+                  openshift.selector("bc", "hrofficedev").startBuild("--wait=true")
+                }
+              }
+            }
+          }
+        }
+    }
+}
